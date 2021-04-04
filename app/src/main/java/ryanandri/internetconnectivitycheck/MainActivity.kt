@@ -2,6 +2,8 @@ package ryanandri.internetconnectivitycheck
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import android.widget.LinearLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val conn : LinearLayout = findViewById(R.id.connectivity_bar)
+        connectionLiveData = ConnectionLiveData(this)
+        connectionLiveData.observe(this, {
+            conn.visibility =
+                if (it) View.GONE else View.VISIBLE
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
